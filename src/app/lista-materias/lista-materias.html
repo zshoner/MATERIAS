@@ -1,0 +1,84 @@
+<h2> Materias </h2>
+
+<!-- AGREGAR -->
+<fieldset>
+  <legend><strong>Agregar Nueva Materia</strong></legend>
+  <div>
+    <input type="text" [(ngModel)]="nombre" placeholder="Nombre de la materia">
+    <input type="text" [(ngModel)]="codigo" placeholder="Código">
+    <input type="text" [(ngModel)]="ciclo" placeholder="Ciclo">
+    
+
+    <select [(ngModel)]="modalidad">
+  <option value="" disabled selected>Seleccione la modalidad</option>
+  <option value="Presencial">Presencial</option>
+  <option value="Semipresencial">Semipresencial</option>
+  <option value="Virtual">Virtual</option>
+</select>
+    
+    <!-- Botón de guardado -->
+    <button type="button" (click)="agregar()" [disabled]="guardando">
+      {{ guardando ? 'Guardando...' : 'Guardar Materia' }}
+    </button>
+  </div>
+</fieldset>
+
+<hr>
+
+<!-- FORMULARIO EDITAR-->
+@if (materiaSeleccionada) {
+  <fieldset>
+    <legend><strong>Modificar Materia (ID: {{ materiaSeleccionada.id }})</strong></legend>
+    <div>
+      <input type="text" [(ngModel)]="materiaSeleccionada.nombre" placeholder="Nombre">
+      <input type="text" [(ngModel)]="materiaSeleccionada.codigo" placeholder="Código">
+      <input type="text" [(ngModel)]="materiaSeleccionada.ciclo" placeholder="Ciclo">
+      
+      <select [(ngModel)]="materiaSeleccionada.modalidad">
+        <option value="" disabled>Seleccione la modalidad</option>
+        <option value="Presencial">Presencial</option>
+        <option value="Semipresencial">Semipresencial</option>
+        <option value="Virtual">Virtual</option>
+      </select>
+
+      <button type="button" (click)="modificar()">Actualizar</button>
+      <button type="button" (click)="materiaSeleccionada = null">Cancelar</button>
+    </div>
+  </fieldset>
+  <hr>
+}
+
+<!-- TABLA (LISTAR Y ELIMINAR) -->
+<h3>Listado de Materias Registradas</h3>
+
+<table border="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th>ID (Firebase)</th>
+      <th>Nombre</th>
+      <th>Código</th>
+      <th>Ciclo</th>
+      <th>Modalidad</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (item of materias; track item.id) {
+      <tr>
+        <td><small>{{ item.id }}</small></td>
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.codigo }}</td>
+        <td>{{ item.ciclo }}</td>
+        <td>{{ item.modalidad }}</td>
+        <td>
+          <button type="button" (click)="seleccionarParaEditar(item)">Editar</button>
+          <button type="button" (click)="eliminar(item.id)">Eliminar</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="6">No hay materias registradas en la base de datos.</td>
+      </tr>
+    }
+  </tbody>
+</table>
